@@ -4,7 +4,8 @@ from main import ma
 
 class GallerySchema(ma.Schema):
     class Meta:
-        fields = ("id", "name", "location", "phone_number", "open_hours", "description")
+        ordered = True
+        fields = ["gallery_id", "name", "phone_number", "location", "open_hours", "description"]
 
 #single gallery schema
 gallery_schema = GallerySchema()

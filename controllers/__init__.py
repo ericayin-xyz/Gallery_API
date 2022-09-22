@@ -1,7 +1,7 @@
-from controllers.gallery_controller import gallery
-from controllers.auth_controller import auth
+from controllers.gallery_controller import gallerys
+# from controllers.auth_controller import auth
 
 registerable_controllers = [
-    auth,
-    gallery
+    gallerys
+    # gallerys, books, articles
 ]

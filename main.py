@@ -14,7 +14,6 @@ def create_app():
 
     # creating our database object! This allows us to use our ORM
     db.init_app(app)
-
     # creating our marshmallow object! This allows us to use schemas
     ma.init_app(app)
 
@@ -24,9 +23,10 @@ def create_app():
     for controller in registerable_controllers:
         app.register_blueprint(controller)
 
+    from commands import db_commands
+    app.register_blueprint(db_commands)
+
     return app
 
 
-
-
-    
+ 

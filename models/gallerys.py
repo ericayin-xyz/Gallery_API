@@ -1,10 +1,10 @@
 from main import db
 
 class Gallery(db.Model):
-    # define the table name for the db
-    __tablename__ = 'GALLERY'
+    # define the table name in the database
+    __tablename__ = 'gallerys'
     # Set the primary key
-    id = db.Column(db.Integer, primary_key=True)
+    gallery_id = db.Column(db.Integer, primary_key=True)
     # Add the rest of the attributes. 
     name = db.Column(db.String())
     location = db.Column(db.String())
