@@ -3,7 +3,7 @@ import os
 class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     # access to .env and get the value of SECRET_KEY, the variable name needs to match
-    JWT_SECRET_KEY = os.environ.get("mysecretkey")
+    JWT_SECRET_KEY = os.environ.get("SECRET_KEY")
     @property
     def SQLALCHEMY_DATABASE_URI(self):
         # access to .env and get the value of DATABASE_URL, the variable name needs to match

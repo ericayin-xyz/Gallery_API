@@ -1,6 +1,9 @@
 from main import db
 from flask import Blueprint
+from main import bcrypt
 from models.gallerys import Gallery
+from models.visitors import Visitor
+from models.admin import Admin
 
 db_commands = Blueprint("db", __name__)
 
@@ -16,6 +19,13 @@ def drop_db():
 
 @db_commands.cli.command('seed')
 def seed_db():
+    admin1 = Admin(
+        username = "YQ001",
+        email = "erika@gmail.com",
+        password = bcrypt.generate_password_hash("1234567").decode("utf8")
+    )
+    db.session.add(admin1)
+
     gallery1 = Gallery(
         name = "NSW Gallery",
         location = "NSW",

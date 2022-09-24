@@ -1,3 +1,4 @@
+from tabnanny import check
 from unittest import result
 from flask import Blueprint, jsonify, request 
 from main import db
@@ -20,7 +21,12 @@ def get_gallerys():
 @gallerys.route("/<int:id>", methods=["GET"])
 def get_gallery(id):
     # gallery = Gallery.query.get(id)
+    # get a list of gallerys filtering by the given criteria, first will return the first match instead of a list
     gallery = Gallery.query.filter_by(gallery_id=id).first()
+    # check if  we found a gallery
+    if not gallery:
+        return {"error": "Gallery not found"}
+    # serialise the result in a single gallery schema
     return jsonify(gallery_schema.dump(gallery))
 
 # The POST route endpoint
@@ -53,9 +59,32 @@ def delete_gallery(id):
     #return an error if the card doesn't exist
     if not gallery:
         return abort(400, description="Gallery does not exist")
+        
     #Delete the card from the database and commit
     db.session.delete(gallery)
     db.session.commit()
     #return the gallery in the response
     return jsonify(gallery_schema.dump(gallery))
     
+@gallerys.route("/<int:id>", methods=["PUT"])
+def update_gallery(id):
+    # find the gallery in the database
+    gallery = Gallery.query.get(id)
+    # check if the gallery exists in the database
+    if not gallery:
+        return {"error": "Gallery not found in the database"}
+    # get the gallery from the request
+    gallery_fields = gallery_schema.load(request.json)
+
+    # modify the gallery
+    gallery.name = gallery_fields["name"],
+    gallery.location = gallery_fields["location"],
+    gallery.phone_number = gallery_fields["phone_number"],
+    gallery.open_hours = gallery_fields["open_hours"],
+    gallery.description = gallery_fields["description"]
+
+    # save changes to the database
+    db.session.commit()
+    return jsonify(gallery_schema.dump(gallery))
+
+
