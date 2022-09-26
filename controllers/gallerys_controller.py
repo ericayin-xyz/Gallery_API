@@ -1,12 +1,11 @@
-from tabnanny import check
-from unittest import result
 from flask import Blueprint, jsonify, request 
 from main import db
 from models.gallerys import Gallery
-from schemas.gallery_schema import gallery_schema, gallerys_schema
+from schemas.gallerys_schema import gallery_schema, gallerys_schema
 from datetime import date
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
-gallerys = Blueprint('gallery', __name__, url_prefix="/gallery")
+gallerys = Blueprint('gallerys', __name__, url_prefix="/gallerys")
 
 # The GET routes endpoint
 @gallerys.route("/", methods=["GET"])
@@ -20,7 +19,7 @@ def get_gallerys():
 
 @gallerys.route("/<int:id>", methods=["GET"])
 def get_gallery(id):
-    # gallery = Gallery.query.get(id)
+    gallery = Gallery.query.get(id)
     # get a list of gallerys filtering by the given criteria, first will return the first match instead of a list
     gallery = Gallery.query.filter_by(gallery_id=id).first()
     # check if  we found a gallery
@@ -31,7 +30,12 @@ def get_gallery(id):
 
 # The POST route endpoint
 @gallerys.route("/", methods=["POST"])
+# a token is required for this request
+@jwt_required()
 def new_gallery():
+    # it's not enough with a token, the identity needs to be a admin
+    if get_jwt_identity() != "admin":
+        return {"error": "You don't have the permission to do this"}
     # add a new gallery
     gallery_fields = gallery_schema.load(request.json)
     new_gallery = Gallery(
@@ -54,11 +58,14 @@ def new_gallery():
 
 # round out our CRUD resource with a DELETE method
 @gallerys.route("/<int:id>/", methods=["DELETE"])
+@jwt_required()
 def delete_gallery(id):
+    if get_jwt_identity() != "admin":
+        return {"error": "You don't have the permission to do this"}
     gallery = Gallery.query.filter_by(id=id).first()
     #return an error if the card doesn't exist
     if not gallery:
-        return abort(400, description="Gallery does not exist")
+        return {"error": "Gallery does not exist"}
         
     #Delete the card from the database and commit
     db.session.delete(gallery)
@@ -67,7 +74,10 @@ def delete_gallery(id):
     return jsonify(gallery_schema.dump(gallery))
     
 @gallerys.route("/<int:id>", methods=["PUT"])
+@jwt_required()
 def update_gallery(id):
+    if get_jwt_identity() != "admin":
+        return {"error": "You don't have the permission to do this"}
     # find the gallery in the database
     gallery = Gallery.query.get(id)
     # check if the gallery exists in the database
