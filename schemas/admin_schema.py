@@ -9,3 +9,4 @@ class AdminSchema(ma.Schema):
 
 # multiple schemas is not necessary right now, just the single schema for log in purposes
 admin_schema = AdminSchema()
+

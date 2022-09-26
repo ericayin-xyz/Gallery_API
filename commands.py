@@ -4,6 +4,9 @@ from main import bcrypt
 from models.gallerys import Gallery
 from models.visitors import Visitor
 from models.admin import Admin
+from models.artist import Artist
+from models.artwork import Artwork
+# from models.exhibition import Exhibition
 
 db_commands = Blueprint("db", __name__)
 
@@ -75,6 +78,37 @@ def seed_db():
     description = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     )
     db.session.add(gallery3)
+    
+    artist1 = Artist(
+        name = "Mzart",
+        dob ="1800-12-01"
+    )
+    db.session.add(artist1)
+
+    artist2 = Artist(
+        name = "Domenica",
+        dob ="1840-10-02"
+    )
+    db.session.add(artist2)
+
+    # don't get id's until we commit to the database
+    artwork1 = Artwork(
+        title = "Modern Music",
+        publish_date = "2022-12-01",
+        description = "ABCDEFGHIJKLMNOPQRST",
+        # add the id explicitly
+        artist = artist2
+    )
+    db.session.add(artwork1)
+
+    artwork2 = Artwork(
+        title = "Classic Pantings",
+        publish_date = "2023-10-22",
+        description = "ABCDEFGHIJKLMNOPQRST",
+        # add the object, SQLAlchemy will handle it
+        artist = artist1
+    )
+    db.session.add(artwork2)
 
     db.session.commit()
     print("Table seeded")
