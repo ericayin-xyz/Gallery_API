@@ -5,7 +5,7 @@ from flask import Blueprint, jsonify, request
 from main import db, bcrypt, jwt
 from flask_jwt_extended import create_access_token
 from models.admin import Admin
-from models.visitors import Visitor
+from models.visitor import Visitor
 from schemas.admin_schema import admin_schema
 from schemas.visitors_schema import visitor_schema
 from marshmallow.exceptions import ValidationError

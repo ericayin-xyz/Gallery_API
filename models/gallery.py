@@ -11,3 +11,13 @@ class Gallery(db.Model):
     phone_number = db.Column(db.Integer())
     open_hours = db.Column(db.String())
     description = db.Column(db.String())
+    
+    exhibition_id = db.Column(db.Integer, db.ForeignKey("exhibitions.exhibition_id"), nullable=False)
+    admin_id = db.Column(db.Integer, db.ForeignKey("admin.admin_id"), nullable=False)
+
+    tickets = db.relationship(
+        "Ticket",
+        backref="gallery",
+        cascade="all, delete"
+    )
+

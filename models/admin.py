@@ -10,3 +10,11 @@ class Admin(db.Model):
     full_name = db.Column(db.String(), nullable=False)
     email = db.Column(db.String(), nullable=False, unique=True)   
     shift = db.Column(db.String(), default= "Monday to Friday")
+
+    gallerys = db.relationship(
+        "Gallery",
+        backref="admin",
+        cascade="all, delete"
+    )
+
+
