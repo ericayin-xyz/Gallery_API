@@ -17,7 +17,7 @@ class Gallery(db.Model):
 
     tickets = db.relationship(
         "Ticket",
-        backref="gallery",
-        cascade="all, delete"
+        backref = "gallery",
+        cascade = "all, delete"
     )
 

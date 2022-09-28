@@ -59,13 +59,15 @@ def seed_db():
     
     artist1 = Artist(
         name = "Mzart",
-        dob ="1800-12-01"
+        dob ="1800-12-01",
+        biography = "Domenica dqwrq"
     )
     db.session.add(artist1)
 
     artist2 = Artist(
         name = "Domenica",
-        dob ="1840-10-02"
+        dob ="1840-10-02",
+        biography = "Domenica dqwrq"
     )
     db.session.add(artist2)   
     db.session.commit()
@@ -91,12 +93,20 @@ def seed_db():
     db.session.commit()
 
     exhibition1 = Exhibition(
-        exhibition_name = "Rabbit",
+        name = "Rabbit",
         start_date = "2023-04-22",
         end_date = "2023-06-22",
         artwork = artwork2
     )
     db.session.add(exhibition1)
+
+    exhibition2 = Exhibition(
+        name = "Rock",
+        start_date = "2023-04-28",
+        end_date = "2023-06-20",
+        artwork = artwork2
+    )
+    db.session.add(exhibition2)
     db.session.commit()
 
     gallery1 = Gallery(
@@ -136,18 +146,20 @@ def seed_db():
     ticket1 = Ticket(
         entry_date = "2023-04-24",
         entry_time = "13:00",
-        purchasing_time = date.today(),
+        purchasing_date = date.today(),
         visitor = visitor1,
-        gallery = gallery1
+        gallery = gallery1,
+        exhibition = exhibition2
     )
     db.session.add(ticket1)
 
     ticket2 = Ticket(
         entry_date = "2023-05-22",
         entry_time = "15:00",
-        purchasing_time = date.today(),
+        purchasing_date = date.today(),
         visitor = visitor2,
-        gallery = gallery3
+        gallery = gallery3,
+        exhibition = exhibition1,
     )
     db.session.add(ticket2)
 

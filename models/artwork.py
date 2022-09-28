@@ -9,9 +9,10 @@ class Artwork(db.Model):
     description = db.Column(db.String())
     artwork_type = db.Column(db.String(), default="Unknown")
     artwork_url = db.Column(db.String())
+    
     artist_id = db.Column(db.Integer, db.ForeignKey("artists.artist_id"), nullable=False)
 
-    exhibitions = db.relationship(
+    exhibition = db.relationship(
         "Exhibition",
         backref="artwork",
         cascade="all, delete"

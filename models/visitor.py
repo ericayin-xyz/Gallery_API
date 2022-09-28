@@ -1,4 +1,3 @@
-import email
 from main import db
 
 class Visitor(db.Model):

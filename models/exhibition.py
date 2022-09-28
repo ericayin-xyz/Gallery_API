@@ -4,7 +4,7 @@ class Exhibition(db.Model):
     __tablename__ = 'exhibitions'
 
     exhibition_id = db.Column(db.Integer, primary_key = True)
-    exhibition_name = db.Column(db.String(), default="colletion")
+    name = db.Column(db.String())
     start_date = db.Column(db.Date())
     end_date = db.Column(db.Date())
     
@@ -15,5 +15,8 @@ class Exhibition(db.Model):
         backref = "exhibition",
         cascade = "all, delete"
     )
-    
-
+    tickets = db.relationship(
+        "Ticket",
+        backref = "exhibition",
+        cascade = "all, delete"
+    )

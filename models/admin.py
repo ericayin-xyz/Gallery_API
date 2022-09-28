@@ -1,4 +1,3 @@
-import email
 from main import db
 
 class Admin(db.Model):

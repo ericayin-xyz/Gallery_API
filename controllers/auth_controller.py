@@ -93,7 +93,7 @@ def login_visitors():
     return {"username": visitor.username, "token": token}
 
 # login admin POST
-@auth.route("/admin/login", methods=["POST"])
+@auth.route("/admin/login/", methods=["POST"])
 def login_admin():
     # get username and password from the request
     admin_fields = admin_schema.load(request.json)

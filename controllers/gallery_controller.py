@@ -73,7 +73,7 @@ def delete_gallery(id):
     #return the gallery in the response
     return jsonify(gallery_schema.dump(gallery))
     
-@gallerys.route("/<int:id>", methods=["PUT"])
+@gallerys.route("/<int:id>/", methods=["PUT"])
 @jwt_required()
 def update_gallery(id):
     if get_jwt_identity() != "admin":
