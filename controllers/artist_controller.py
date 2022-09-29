@@ -29,6 +29,11 @@ def add_artist():
         return {"error": "You don't have the permission to do this"}
 
     artist_fields = artist_schema.load(request.json)
+    artist = Artist.query.filter_by(name=artist_fields["name"]).first()
+    artist_dob = Artist.query.filter_by(dob=artist_fields["dob"]).first()
+    if artist or artist_dob:
+        return {"error": "Artist already registered"}
+
     new_artist = Artist(
         name = artist_fields["name"],
         dob = artist_fields["dob"],

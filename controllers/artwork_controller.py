@@ -23,20 +23,26 @@ def get_artwork(id):
     return jsonify(artwork_schema.dump(artwork))
 
 @artworks.route("/", methods=["POST"])
-# @jwt_required()
+@jwt_required()
 def new_artwork():
     # it is not enough with a token, the identity needs to be admin
-#     if get_jwt_identity() != "admin":
-#         return {"error": "You don't have the permission to do this"}
+    if get_jwt_identity() != "admin":
+        return {"error": "You don't have the permission to do this"}
 
     artwork_fields = artwork_schema.load(request.json)
+    artwork = Artwork.query.filter_by(title=artwork_fields["title"]).first()
+    artwork_description = Artwork.query.filter_by(description=artwork_fields["description"]).first()
+    if artwork or artwork_description:
+        return {"error": "Artwork already registered"}
+
     new_artwork = Artwork(
         title = artwork_fields["title"],
         publish_date = artwork_fields["publish_date"],
         description = artwork_fields["description"],
         artwork_type = artwork_fields["artwork_type"],
         artwork_url = artwork_fields["artwork_url"],
-        artist_id = artwork_fields["artist_id"]
+        artist_id = artwork_fields["artist_id"],
+        exhibition_id = artwork_fields["exhibition_id"]
     )
     db.session.add(new_artwork)
     db.session.commit()

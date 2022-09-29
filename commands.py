@@ -47,9 +47,9 @@ def seed_db():
     db.session.add(visitor3)
 
     admin1 = Admin(
-        username = "YQ001",
-        full_name = "Erika Y",
-        email = "erika@gmail.com",
+        username = "User1",
+        full_name = "Candy Mzart",
+        email = "user1@gmail.com",
         password = bcrypt.generate_password_hash("1234567").decode("utf8")
     )
     db.session.add(admin1)
