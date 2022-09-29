@@ -10,6 +10,6 @@ class Artist(db.Model):
 
     artworks = db.relationship(
         "Artwork",
-        backref="artist",
-        cascade="all, delete"
+        backref = "artist",
+        cascade = "all, delete"
     )

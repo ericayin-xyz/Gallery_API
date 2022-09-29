@@ -12,7 +12,6 @@ class Gallery(db.Model):
     open_hours = db.Column(db.String())
     description = db.Column(db.String())
     
-    exhibition_id = db.Column(db.Integer, db.ForeignKey("exhibitions.exhibition_id"), nullable=False)
     admin_id = db.Column(db.Integer, db.ForeignKey("admin.admin_id"), nullable=False)
 
     tickets = db.relationship(
@@ -20,4 +19,8 @@ class Gallery(db.Model):
         backref = "gallery",
         cascade = "all, delete"
     )
-
+    exhibitions = db.relationship(
+        "Exhibition",
+        backref = "gallery",
+        cascade = "all, delete"
+    )

@@ -18,7 +18,7 @@ def get_artists():
 def get_artist(id):
     artist = Artist.query.get(id)
     if not artist:
-        return {"error": "Artists not found"}
+        return {"error": "Artist not found"}
     return jsonify(artist_schema.dump(artist))
 
 # The POST routes endpoint
@@ -46,7 +46,7 @@ def delete_artist(id):
 
     artist = Artist.query.filter_by(id=id).first()
     if not artist:
-        return {"error": "Artist does not exist"}       
+        return {"error": "Artist not found"}       
     db.session.delete(artist)
     db.session.commit()
     return jsonify(artist_schema.dump(artist))
@@ -59,7 +59,7 @@ def update_gallery(id):
 
     artist = Artist.query.get(id)
     if not artist:
-        return {"error": "Artist not found in the database"}
+        return {"error": "Artist not found"}
     artist_fields = artist_schema.load(request.json)
 
     artist.name = artist_fields["name"],

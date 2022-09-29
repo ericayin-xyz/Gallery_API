@@ -19,7 +19,7 @@ def get_artwork(id):
     artwork = Artwork.query.filter_by(artwork_id=id).first()
     # check if  we found artworks
     if not artwork:
-        return {"error": "Artworks not found"}
+        return {"error": "Artwork not found"}
     return jsonify(artwork_schema.dump(artwork))
 
 @artworks.route("/", methods=["POST"])
@@ -49,7 +49,7 @@ def update_gallery(id):
     #     return {"error": "You don't have the permission to do this"}
     artwork = Artwork.query.get(id)
     if not artwork:
-        return {"error": "Artwork not found in the database"}
+        return {"error": "Artwork not found"}
     artwork_fields = artwork_schema.load(request.json)
 
     artwork.title = artwork_fields["title"],
@@ -69,7 +69,7 @@ def delete_gallery(id):
     #     return {"error": "You don't have the permission to do this"}
     artwork = Artwork.query.filter_by(id=id).first()
     if not artwork:
-        return {"error": "Artwork does not exist"}
+        return {"error": "Artwork not found"}
     
     db.session.delete(artwork)
     db.session.commit()

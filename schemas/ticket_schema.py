@@ -7,9 +7,9 @@ class TicketSchema(ma.Schema):
     class Meta:
         ordered = True
         fields = ["ticket_id", "entry_date", "entry_time", "purchasing_date", "visitor", "gallery", "exhibition"]
-        # load_only = ['artist_id']
+        load_only = ["ticket_id", 'exhibition_id']
     visitor = fields.Nested("VisitorSchema", only=("email",))
-    exhibition = fields.Nested(ExhibitionSchema, only=("name", "start_date", "end_date",)) # exclude=("artist",) to avoid recursive calls between schemas
+    exhibition = fields.Nested("ExhibitionSchema", only = ("name", "gallery",))
     gallery = fields.Nested(GallerySchema, only=("name","location",)) 
 
 ticket_schema = TicketSchema()

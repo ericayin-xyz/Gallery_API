@@ -1,4 +1,3 @@
-from time import strftime
 from main import db
 from flask import Blueprint
 from main import bcrypt
@@ -46,7 +45,6 @@ def seed_db():
         password = bcrypt.generate_password_hash("1234567").decode("utf8")
     )
     db.session.add(visitor3)
-    
 
     admin1 = Admin(
         username = "YQ001",
@@ -55,7 +53,6 @@ def seed_db():
         password = bcrypt.generate_password_hash("1234567").decode("utf8")
     )
     db.session.add(admin1)
-    db.session.commit()
     
     artist1 = Artist(
         name = "Mzart",
@@ -72,50 +69,12 @@ def seed_db():
     db.session.add(artist2)   
     db.session.commit()
 
-    artwork1 = Artwork(
-        title = "Modern Music",
-        publish_date = "2022-12-01",
-        artwork_type = "modern",
-        description = "ABCDEFGHIJKLMNOPQRST",
-        artist = artist2
-    )
-    db.session.add(artwork1)
-
-    artwork2 = Artwork(
-        title = "Classic Pantings",
-        publish_date = "2023-10-22",
-        artwork_type = "modern",
-        description = "ABCDEFGHIJKLMNOPQRST",
-        # add the object, SQLAlchemy will handle it
-        artist = artist1
-    )
-    db.session.add(artwork2)
-    db.session.commit()
-
-    exhibition1 = Exhibition(
-        name = "Rabbit",
-        start_date = "2023-04-22",
-        end_date = "2023-06-22",
-        artwork = artwork2
-    )
-    db.session.add(exhibition1)
-
-    exhibition2 = Exhibition(
-        name = "Rock",
-        start_date = "2023-04-28",
-        end_date = "2023-06-20",
-        artwork = artwork2
-    )
-    db.session.add(exhibition2)
-    db.session.commit()
-
     gallery1 = Gallery(
         name = "NSW Gallery",
         location = "NSW",
         phone_number = "042582931",
         open_hours = "10:00-17:00",
         description = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-        exhibition = exhibition1,
         admin = admin1
     )
     db.session.add(gallery1)
@@ -126,7 +85,6 @@ def seed_db():
         phone_number = "042595664",
         open_hours = "10:00-17:00",
         description = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-        exhibition = exhibition1,
         admin = admin1
     )
     db.session.add(gallery2)
@@ -137,10 +95,47 @@ def seed_db():
         phone_number = "042596623",
         open_hours = "10:00-17:00",
         description = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-        exhibition = exhibition1,
         admin = admin1
     )
     db.session.add(gallery3)
+    db.session.commit()
+
+    exhibition1 = Exhibition(
+        name = "Rabbit",
+        start_date = "2023-04-22",
+        end_date = "2023-06-22",
+        gallery_id = gallery2.gallery_id
+    )
+    db.session.add(exhibition1)
+
+    exhibition2 = Exhibition(
+        name = "Rock",
+        start_date = "2023-04-28",
+        end_date = "2023-06-20",
+        gallery_id = gallery2.gallery_id
+    )
+    db.session.add(exhibition2)
+    db.session.commit()
+
+    artwork1 = Artwork(
+        title = "Modern Music",
+        publish_date = "2022-12-01",
+        artwork_url = "www.modern.com",
+        description = "ABCDEFGHIJKLMNOPQRST",
+        artist = artist2,
+        exhibition = exhibition1
+    )
+    db.session.add(artwork1)
+
+    artwork2 = Artwork(
+        publish_date = "2023-10-22",
+        artwork_type = "modern",
+        description = "ABCDEFGHIJKLMNOPQRST",
+        # add the object, SQLAlchemy will handle it
+        artist = artist1,
+        exhibition = exhibition1
+    )
+    db.session.add(artwork2)
     db.session.commit()
 
     ticket1 = Ticket(

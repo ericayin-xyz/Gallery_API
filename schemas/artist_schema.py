@@ -6,7 +6,7 @@ class ArtistSchema(ma.Schema):
     class Meta:
         ordered = True
         fields = ["artist_id", "name", "dob", "biography", "artwork_id", "artworks"]
-
+        load_only = ["artist_id", "artwork_id"]
     artworks = fields.List(fields.Nested(ArtworkSchema, only=("title", "publish_date", "description",))) # exclude=("artist",) to avoid recursive calls between schemas
 
 artist_schema = ArtistSchema()
