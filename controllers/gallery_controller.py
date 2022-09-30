@@ -68,7 +68,7 @@ def new_gallery():
 def delete_gallery(id):
     if get_jwt_identity() != "admin":
         return {"error": "You don't have the permission to do this"}
-    gallery = Gallery.query.filter_by(id=id).first()
+    gallery = Gallery.query.get(id)
     #return an error if the card doesn't exist
     if not gallery:
         return {"error": "Gallery does not exist"}
@@ -77,7 +77,7 @@ def delete_gallery(id):
     db.session.delete(gallery)
     db.session.commit()
     #return the gallery in the response
-    return jsonify(gallery_schema.dump(gallery))
+    return {"msg": "The gallery was deleted successfully"}
 
 # admin updates gallery
 @galleries.route("/<int:id>/", methods=["PUT"])
@@ -89,7 +89,7 @@ def update_gallery(id):
     gallery = Gallery.query.get(id)
     # check if the gallery exists in the database
     if not gallery:
-        return {"error": "Gallery not found in the database"}
+        return {"error": "Gallery not found"}
     # get the gallery from the request
     gallery_fields = gallery_schema.load(request.json)
 

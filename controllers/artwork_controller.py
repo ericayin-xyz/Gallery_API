@@ -84,4 +84,4 @@ def delete_gallery(id):
     
     db.session.delete(artwork)
     db.session.commit()
-    return jsonify(artwork_schema.dump(artwork))
+    return {"msg": "The artwork was deleted successfully"}

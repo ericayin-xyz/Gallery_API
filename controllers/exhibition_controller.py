@@ -89,3 +89,19 @@ def new_ticket(exhibition_id):
 
     return jsonify(ticket_schema.dump(new_ticket))
 
+# admin deletes exhibitions
+@exhibitions.route("/<int:id>/", methods=["DELETE"])
+@jwt_required()
+def delete_exhibition(id):
+    if get_jwt_identity() != "admin":
+        return {"error": "You don't have the permission to do this"}
+    exhibition = Exhibition.query.get(id)
+    #return an error if the card doesn't exist
+    if not exhibition:
+        return {"error": "Exhibitions does not exist"}
+        
+    #Delete the card from the database and commit
+    db.session.delete(exhibition)
+    db.session.commit()
+    #return the exhibitions in the response
+    return {"msg": "The exhibition was deleted successfully"}
