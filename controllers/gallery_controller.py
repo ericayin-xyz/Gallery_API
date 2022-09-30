@@ -6,10 +6,11 @@ from models.admin import Admin
 from datetime import date
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
-gallerys = Blueprint('gallerys', __name__, url_prefix="/gallerys")
+galleries = Blueprint('galleries', __name__, url_prefix="/galleries")
 
 # The GET routes endpoint
-@gallerys.route("/", methods=["GET"])
+# search for all gallery
+@galleries.route("/", methods=["GET"])
 def get_gallerys():
     # get all gallerys from the database table
     gallerys_list = Gallery.query.all()
@@ -18,7 +19,8 @@ def get_gallerys():
     # return the data in JSON format
     return jsonify(result)
 
-@gallerys.route("/<int:id>/", methods=["GET"])
+# search for a specific gallery
+@galleries.route("/<int:id>/", methods=["GET"])
 def get_gallery(id):
     gallery = Gallery.query.get(id)
     # get a list of gallerys filtering by the given criteria, first will return the first match instead of a list
@@ -30,7 +32,8 @@ def get_gallery(id):
     return jsonify(gallery_schema.dump(gallery))
 
 # The POST route endpoint
-@gallerys.route("/", methods=["POST"])
+# admin posts a new gallery
+@galleries.route("/", methods=["POST"])
 # a token is required for this request
 @jwt_required()
 def new_gallery():
@@ -59,8 +62,8 @@ def new_gallery():
     #return the gallery in the response
     return jsonify(gallery_schema.dump(new_gallery))
 
-# round out our CRUD resource with a DELETE method
-@gallerys.route("/<int:id>/", methods=["DELETE"])
+# admin deletes galleries
+@galleries.route("/<int:id>/", methods=["DELETE"])
 @jwt_required()
 def delete_gallery(id):
     if get_jwt_identity() != "admin":
@@ -75,8 +78,9 @@ def delete_gallery(id):
     db.session.commit()
     #return the gallery in the response
     return jsonify(gallery_schema.dump(gallery))
-    
-@gallerys.route("/<int:id>/", methods=["PUT"])
+
+# admin updates gallery
+@galleries.route("/<int:id>/", methods=["PUT"])
 @jwt_required()
 def update_gallery(id):
     if get_jwt_identity() != "admin":

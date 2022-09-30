@@ -8,12 +8,13 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 artists = Blueprint('artists', __name__, url_prefix="/artists")
 
 # The GET routes endpoint
+# search for artists
 @artists.route("/", methods=["GET"])
 def get_artists():
     artists_list = Artist.query.all()
     result = artists_schema.dump(artists_list)
     return jsonify(result)
-
+# search for a specific artist
 @artists.route("/<int:id>", methods=["GET"])
 def get_artist(id):
     artist = Artist.query.get(id)
@@ -43,19 +44,21 @@ def add_artist():
     db.session.commit()
     return jsonify(artist_schema.dump(new_artist)), 201
 
+# admin deletes artists
 @artists.route("/<int:id>/", methods=["DELETE"])
-# @jwt_required()
+@jwt_required()
 def delete_artist(id):
-    # if get_jwt_identity() != "admin":
-    #     return {"error": "You don't have the permission to do this"}
+    if get_jwt_identity() != "admin":
+        return {"error": "You don't have the permission to do this"}
 
-    artist = Artist.query.filter_by(id=id).first()
+    artist = Artist.query.get(id)
     if not artist:
         return {"error": "Artist not found"}       
     db.session.delete(artist)
     db.session.commit()
-    return jsonify(artist_schema.dump(artist))
-    
+    return {"msg": "The artist was deleted successfully"}
+
+# admin updates artists   
 @artists.route("/<int:id>/", methods=["PUT"])
 @jwt_required()
 def update_gallery(id):

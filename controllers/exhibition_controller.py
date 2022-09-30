@@ -12,13 +12,14 @@ from datetime import date
 exhibitions = Blueprint('exhibitions', __name__, url_prefix="/exhibitions")
 
 # The GET routes endpoint
-# GET for visitors
+# search for exhibitions
 @exhibitions.route("/", methods=["GET"])
 def get_exhibitions():
     exhibitions_list = Exhibition.query.all()
     result = exhibitions_schema.dump(exhibitions_list)
     return jsonify(result)
 
+# search for a specific exhibition
 @exhibitions.route("/<int:id>/", methods=["GET"])
 def get_exhibition(id):
     exhibition = Exhibition.query.filter_by(exhibition_id=id).first()
@@ -26,7 +27,7 @@ def get_exhibition(id):
         return {"error": "Exhibition not found"}
     return jsonify(exhibition_schema.dump(exhibition))
 
-# GET for tickets (admin)
+# GET all tickets (admin)
 @exhibitions.route("/tickets/", methods=["GET"])
 @jwt_required()
 def get_all_tickets():
@@ -35,23 +36,8 @@ def get_all_tickets():
     tickets_list = Ticket.query.all()
     return jsonify(tickets_schema.dump(tickets_list))
 
-# filter tickets by different exhibitions
-# @exhibitions.route("/<int:exhibition_id>/tickets/", methods=["GET"])
-# @jwt_required()
-# def get_exhibition_tickets(exhibition_id):
-#     if get_jwt_identity() != "admin":
-#         return {"error": "You don't have the permission to do this"}
-#     exhibition_tickets = Ticket.query(exhibition_id)
-
-#     if not exhibition_tickets:
-#         return {"error": "Ticket not found in this exhibition"}
-
-#     return jsonify(ticket_schema.dump(exhibition_tickets))
-
-################################################################
-
 # The POST routes endpoint
-# admin adds new exhibitions
+# admin adds a new exhibition
 @exhibitions.route("/", methods=["POST"])
 @jwt_required()
 def new_exhibition():

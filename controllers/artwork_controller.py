@@ -7,21 +7,24 @@ from datetime import date
 
 artworks = Blueprint('artworks', __name__, url_prefix="/artworks")
 
+# search for artworks
 @artworks.route("/", methods=["GET"])
 def get_artworks():
     artworks_list = Artwork.query.all()
     result = artworks_schema.dump(artworks_list)
     return jsonify(result)
 
+# search for a specific artwork
 @artworks.route("/<int:id>/", methods=["GET"])
 def get_artwork(id):
     artwork = Artwork.query.get(id)
-    artwork = Artwork.query.filter_by(artwork_id=id).first()
+    # artwork = Artwork.query.filter_by(artwork_id=id).first()
     # check if  we found artworks
     if not artwork:
         return {"error": "Artwork not found"}
     return jsonify(artwork_schema.dump(artwork))
 
+# admin posts a new artwork
 @artworks.route("/", methods=["POST"])
 @jwt_required()
 def new_artwork():
@@ -48,11 +51,12 @@ def new_artwork():
     db.session.commit()
     return jsonify(artwork_schema.dump(new_artwork))
 
+# admin updates
 @artworks.route("/<int:id>/", methods=["PUT"])
-# @jwt_required()
-def update_gallery(id):
-    # if get_jwt_identity() != "admin":
-    #     return {"error": "You don't have the permission to do this"}
+@jwt_required()
+def update_artwork(id):
+    if get_jwt_identity() != "admin":
+        return {"error": "You don't have the permission to do this"}
     artwork = Artwork.query.get(id)
     if not artwork:
         return {"error": "Artwork not found"}
@@ -66,14 +70,15 @@ def update_gallery(id):
     artwork.artwork_type = artwork_fields["artwork_type"]
 
     db.session.commit()
-    return jsonify( artwork_schema.dump( artwork))
+    return jsonify(artwork_schema.dump(artwork))
 
+# admin deletes artworks
 @artworks.route("/<int:id>/", methods=["DELETE"])
-# @jwt_required()
+@jwt_required()
 def delete_gallery(id):
-    # if get_jwt_identity() != "admin":
-    #     return {"error": "You don't have the permission to do this"}
-    artwork = Artwork.query.filter_by(id=id).first()
+    if get_jwt_identity() != "admin":
+        return {"error": "You don't have the permission to do this"}
+    artwork = Artwork.query.get(id)
     if not artwork:
         return {"error": "Artwork not found"}
     
